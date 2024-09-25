@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, redirect, url_for, jsonify
 import pandas as pd
 import os
 
@@ -8,7 +8,6 @@ mcdonalds_items = pd.read_csv('mcdonalds_dataset.csv')
 # drop duplicate rows
 mcdonalds_items = mcdonalds_items.drop_duplicates(subset='product_name')
 
-user_items = []
 image_exts = ['.jpg', '.jpeg', '.png', '.webp', '.jfif']
 
 @app.route('/')
@@ -29,6 +28,11 @@ def index():
         file_found = False
         
     return render_template('index.html', items=item_names, images=file_names)
+
+@app.route('/results', methods=['POST', 'GET'])
+def result():
+    return render_template('results.html', data=mcdonalds_items)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

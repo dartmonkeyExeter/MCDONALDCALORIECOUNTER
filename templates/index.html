@@ -18,12 +18,34 @@
     </div>
 
     <div class="user-order">
-        <h2>Your Order:</h2>
-        <ul>
-        </ul>
+        <h2 id="order-h2">Your Order:</h2>
+        <div id="scrollable">
+            <ul>
+            </ul>
+        </div>
+        <div class="button-container" id="submit-and-clear-container">
+            <button class="big-button" id="clear-button" onclick="clearList()">
+                <img src="{{url_for('static', filename='images/trash.png')}}" id="trash-icon">
+            </button>
+            <button class="big-button" id="submit-button" onclick="sendList()">SUBMIT</button>
+        </div>
     </div>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
     <script>
+        function clearList(){ 
+            userItems = [];
+            updateOrder();
+        }
+
+        function sendList() {
+            // store it locally
+            localStorage.setItem('userItems', JSON.stringify(userItems));
+            window.location.href = '/results';
+        }
+
+
         function updateOrder() {
             const userOrder = document.querySelector('.user-order ul');
             userOrder.innerHTML = '';

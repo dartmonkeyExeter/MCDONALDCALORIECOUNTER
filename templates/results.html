@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<span id="test"></span>
+
+<script>
+    function getItemsFromLocalStorage() {
+        const userItems = JSON.parse(localStorage.getItem('userItems'));
+        return JSON.stringify(userItems);
+    }
+
+    var items = getItemsFromLocalStorage();
+    document.getElementById('test').innerHTML = items;
+</script>
+{% endblock %}
