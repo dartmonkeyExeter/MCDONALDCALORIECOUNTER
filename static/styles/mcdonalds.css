@@ -89,3 +89,9 @@ body, html {
 .remove-button {
     background-color: #DA291C;
 }
+
+.user-order {
+    position: fixed;
+
+    width: 100%;
+}

@@ -17,7 +17,34 @@
         {% endfor %}
     </div>
 
+    <div class="user-order">
+        <h2>Your Order:</h2>
+        <ul>
+        </ul>
+    </div>
+
     <script>
+        function updateOrder() {
+            const userOrder = document.querySelector('.user-order ul');
+            userOrder.innerHTML = '';
+            
+            var sortedItems = userItems.slice().sort();
+            var count = {};
+            sortedItems.forEach(item => {
+                count[item] = (count[item] || 0) + 1;
+            });
+
+            userItems.forEach(item => {
+                if (userOrder.querySelector(`li[data-item="${item}"]`)) {
+                    return;
+                }
+                const itemElement = document.createElement('li');
+                itemElement.textContent = `${item} x${count[item]}`;
+                itemElement.dataset.item = item;
+                userOrder.appendChild(itemElement);
+            });
+        }
+
         let userItems = [];
 
         const items = document.querySelectorAll('.item');
@@ -34,14 +61,14 @@
                         userItems.splice(index, 1);
                     }
                 }
+                updateOrder();
             });
 
             addButton.addEventListener('click', () => {
                 for (let i = 0; i < quantityInput.value; i++) {
                     userItems.push(item.querySelector('h2').textContent);
                 }
-                userItems.sort();
-                console.log(userItems);
+                updateOrder();
             });
         });
     </script>
