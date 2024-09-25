@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="items-div">
+        {% for item in items %}
+            <div class="item">
+                <img class="item-image" src="{{ url_for('static', filename='images/' + images[loop.index - 1]) }}">
+                <h2>{{ item }}</h2>
+                <input class="quantity-input" type="number" name="{{ item }}-quantity" id="{{ item }}-quantity" value="1">
+                <div class="button-container">
+                    <button class="remove-button" id="{{ item }}-remove">-</button>
+                    <button class="add-button" id="{{ item }}-add">+</button>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
