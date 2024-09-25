@@ -6,7 +6,9 @@
             <div class="item">
                 <img class="item-image" src="{{ url_for('static', filename='images/' + images[loop.index - 1]) }}">
                 <h2>{{ item }}</h2>
-                <input class="quantity-input" type="number" name="{{ item }}-quantity" id="{{ item }}-quantity" value="1">
+                <input class="quantity-input" type="number" 
+                name="{{ item }}-quantity" id="{{ item }}-quantity" 
+                value="1" max="100" min="1">
                 <div class="button-container">
                     <button class="remove-button" id="{{ item }}-remove">-</button>
                     <button class="add-button" id="{{ item }}-add">+</button>
@@ -14,4 +16,33 @@
             </div>
         {% endfor %}
     </div>
+
+    <script>
+        let userItems = [];
+
+        const items = document.querySelectorAll('.item');
+        items.forEach(item => {
+            const quantityInput = item.querySelector('.quantity-input');
+            const removeButton = item.querySelector('.remove-button');
+            const addButton = item.querySelector('.add-button');
+
+            removeButton.addEventListener('click', () => {
+                // remove X items from the userItems array
+                for (let i = 0; i < quantityInput.value; i++) {
+                    const index = userItems.indexOf(item.querySelector('h2').textContent);
+                    if (index > -1) {
+                        userItems.splice(index, 1);
+                    }
+                }
+            });
+
+            addButton.addEventListener('click', () => {
+                for (let i = 0; i < quantityInput.value; i++) {
+                    userItems.push(item.querySelector('h2').textContent);
+                }
+                userItems.sort();
+                console.log(userItems);
+            });
+        });
+    </script>
 {% endblock %}

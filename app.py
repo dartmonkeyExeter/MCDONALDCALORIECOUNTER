@@ -5,6 +5,9 @@ import os
 app = Flask(__name__)
 
 mcdonalds_items = pd.read_csv('mcdonalds_dataset.csv')
+# drop duplicate rows
+mcdonalds_items = mcdonalds_items.drop_duplicates(subset='product_name')
+
 user_items = []
 image_exts = ['.jpg', '.jpeg', '.png', '.webp', '.jfif']
 
