@@ -1,97 +1,133 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="items-div">
-        {% for item in items %}
-            <div class="item">
-                <img class="item-image" src="{{ url_for('static', filename='images/' + images[loop.index - 1]) }}">
-                <h2>{{ item }}</h2>
-                <input class="quantity-input" type="number" 
-                name="{{ item }}-quantity" id="{{ item }}-quantity" 
-                value="1" max="100" min="1">
-                <div class="button-container">
-                    <button class="remove-button" id="{{ item }}-remove">-</button>
-                    <button class="add-button" id="{{ item }}-add">+</button>
-                </div>
+
+<input type="text" id="search" placeholder="Search...">
+
+<hr>
+
+<div class="items-div">
+    {% for item in items %}
+        <div class="item">
+            <img class="item-image" src="{{ url_for('static', filename='images/' + images[loop.index - 1]) }}">
+            <h2>{{ item }}</h2>
+            <input class="quantity-input" type="number" 
+            name="{{ item }}-quantity" id="{{ item }}-quantity" 
+            value="1" max="100" min="1">
+            <div class="button-container">
+                <button class="remove-button" id="{{ item }}-remove">-</button>
+                <button class="add-button" id="{{ item }}-add">+</button>
             </div>
-        {% endfor %}
-    </div>
-
-    <div class="user-order">
-        <h2 id="order-h2">Your Order:</h2>
-        <div id="scrollable">
-            <ul>
-            </ul>
         </div>
-        <div class="button-container" id="submit-and-clear-container">
-            <button class="big-button" id="clear-button" onclick="clearList()">
-                <img src="{{url_for('static', filename='images/trash.png')}}" id="trash-icon">
-            </button>
-            <button class="big-button" id="submit-button" onclick="sendList()">SUBMIT</button>
-        </div>
+    {% endfor %}
+</div>
+
+<div class="user-order">
+    <h2 id="order-h2">Your Order:</h2>
+    <div id="scrollable">
+        <ul></ul>
     </div>
+    <div class="button-container" id="submit-and-clear-container">
+        <button class="big-button" id="clear-button" onclick="clearList()">
+            <img src="{{url_for('static', filename='images/trash.png')}}" id="trash-icon">
+        </button>
+        <button class="big-button" id="submit-button" onclick="sendList()">SUBMIT</button>
+    </div>
+</div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- jQuery (needed for the AJAX request) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-    <script>
-        function clearList(){ 
-            userItems = [];
-            updateOrder();
-        }
+<script>
+    let userItems = [];
 
-        function sendList() {
-            // store it locally
-            localStorage.setItem('userItems', JSON.stringify(userItems));
-            window.location.href = '/results';
-        }
-
-
-        function updateOrder() {
-            const userOrder = document.querySelector('.user-order ul');
-            userOrder.innerHTML = '';
-            
-            var sortedItems = userItems.slice().sort();
-            var count = {};
-            sortedItems.forEach(item => {
-                count[item] = (count[item] || 0) + 1;
-            });
-
-            userItems.forEach(item => {
-                if (userOrder.querySelector(`li[data-item="${item}"]`)) {
-                    return;
-                }
-                const itemElement = document.createElement('li');
-                itemElement.textContent = `${item} x${count[item]}`;
-                itemElement.dataset.item = item;
-                userOrder.appendChild(itemElement);
-            });
-        }
-
-        let userItems = [];
-
+    // search, filter, and display without refreshing the page
+    document.getElementById('search').addEventListener('input', function() {
+        const searchValue = this.value.toLowerCase();
         const items = document.querySelectorAll('.item');
+
         items.forEach(item => {
-            const quantityInput = item.querySelector('.quantity-input');
-            const removeButton = item.querySelector('.remove-button');
-            const addButton = item.querySelector('.add-button');
-
-            removeButton.addEventListener('click', () => {
-                // remove X items from the userItems array
-                for (let i = 0; i < quantityInput.value; i++) {
-                    const index = userItems.indexOf(item.querySelector('h2').textContent);
-                    if (index > -1) {
-                        userItems.splice(index, 1);
-                    }
-                }
-                updateOrder();
-            });
-
-            addButton.addEventListener('click', () => {
-                for (let i = 0; i < quantityInput.value; i++) {
-                    userItems.push(item.querySelector('h2').textContent);
-                }
-                updateOrder();
-            });
+            const itemName = item.querySelector('h2').textContent.toLowerCase();
+            if (itemName.includes(searchValue)) {
+                item.style.display = 'flex';
+            } else {
+                item.style.display = 'none';
+            }
         });
-    </script>
+    });
+
+    // Clears the order list
+    function clearList() {
+        userItems = [];
+        updateOrder();
+    }
+
+    // Sends the list via an AJAX POST request
+    function sendList() {
+        const jsonString = JSON.stringify(userItems);
+
+        // AJAX POST request
+        $.ajax({
+            type: "POST",
+            url: "/results",
+            contentType: "application/json",
+            data: jsonString,
+            success: function(response) {
+                console.log('Order submitted:', response);
+                // Redirect to the results page after successful submission
+                window.location.href = '/results_page';
+            },
+            error: function(error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+
+    // Updates the order view on the page
+    function updateOrder() {
+        const userOrder = document.querySelector('.user-order ul');
+        userOrder.innerHTML = '';
+
+        var sortedItems = userItems.slice().sort();
+        var count = {};
+        sortedItems.forEach(item => {
+            count[item] = (count[item] || 0) + 1;
+        });
+
+        userItems.forEach(item => {
+            if (userOrder.querySelector(`li[data-item="${item}"]`)) {
+                return;
+            }
+            const itemElement = document.createElement('li');
+            itemElement.textContent = `${item} x${count[item]}`;
+            itemElement.dataset.item = item;
+            userOrder.appendChild(itemElement);
+        });
+    }
+
+    // Adding event listeners for each item (increment and decrement)
+    const items = document.querySelectorAll('.item');
+    items.forEach(item => {
+        const quantityInput = item.querySelector('.quantity-input');
+        const removeButton = item.querySelector('.remove-button');
+        const addButton = item.querySelector('.add-button');
+
+        removeButton.addEventListener('click', () => {
+            for (let i = 0; i < quantityInput.value; i++) {
+                const index = userItems.indexOf(item.querySelector('h2').textContent);
+                if (index > -1) {
+                    userItems.splice(index, 1);
+                }
+            }
+            updateOrder();
+        });
+
+        addButton.addEventListener('click', () => {
+            for (let i = 0; i < quantityInput.value; i++) {
+                userItems.push(item.querySelector('h2').textContent);
+            }
+            updateOrder();
+        });
+    });
+</script>
 {% endblock %}

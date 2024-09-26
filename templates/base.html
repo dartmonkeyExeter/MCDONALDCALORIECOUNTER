@@ -12,9 +12,10 @@
 </head>
 <body>
     <header>
-        <img src="{{ url_for('static', filename='images/mcdonalds-logo.png') }}" style="width: 64px; height: auto;">
+        <img src="{{ url_for('static', filename='images/mcdonalds-logo.png') }}" id="mc-logo">
         <h1 id="title">McCalorie Counter</h1>
     </header>
+    <hr>
     <main>
         {% block content %}{% endblock %}
     </main>

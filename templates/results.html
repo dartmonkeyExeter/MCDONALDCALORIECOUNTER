@@ -1,16 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-<span id="test"></span>
-
-<script>
-    function getItemsFromLocalStorage() {
-        const userItems = JSON.parse(localStorage.getItem('userItems'));
-        return JSON.stringify(userItems);
-    }
-
-    var items = getItemsFromLocalStorage();
-    document.getElementById('test').innerHTML = items;
-</script>
+<h1>Your order has been submitted successfully!</h1>
+<h2>Your Order Items:</h2>
+<ul>
+    {{ total_calories }}
+    {% for item in order %}
+        <li>{{ item }}</li>
+    {% endfor %}
+</ul>
+<p>Thank you for ordering from McDonald's!</p>
 {% endblock %}
