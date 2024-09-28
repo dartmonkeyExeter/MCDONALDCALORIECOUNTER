@@ -35,7 +35,6 @@
     </div>
 </div>
 
-<!-- jQuery (needed for the AJAX request) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <script>
@@ -98,25 +97,32 @@
             if (userOrder.querySelector(`li[data-item="${item}"]`)) {
                 return;
             }
-            const itemElement = document.createElement('li');
-            const imageElememt = document.createElement('img');
-            itemElement.textContent = `${item} x${count[item]}`;
-            itemElement.dataset.item = item;
 
-            image_exts = ['.jpg', '.jpeg', '.png', '.webp', '.jfif'];
-            let ext = '';
-
-            image_exts.forEach(image_ext => {
-                if (imageElememt.src === '' && imageElememt.src !== null) {
-                    ext = image_ext;
+            const delButton = document.createElement('button');
+            delButton.textContent = 'x';
+            delButton.classList.add('item-delete-button');
+            delButton.addEventListener('click', () => {
+                for (let i = 0; i < count[item]; i++) {
+                    const index = userItems.indexOf(item);
+                    if (index > -1) {
+                        userItems.splice(index, 1);
+                    }
                 }
+                updateOrder();
             });
 
-            let image_path = `{{ url_for('static', filename='images/') }}${item}${ext}`;
-            imageElement.src = image_path;
-            imageElememt.style.width = 'auto';
-            imageElememt.style.height = '64px';
-            itemElement.prepend(imageElememt);
+            const itemElement = document.createElement('li');
+            const itemSpan = document.createElement('span');
+            
+            itemSpan.textContent = `${item} x${count[item]}`;
+            itemElement.dataset.item = item;
+            itemSpan.style.display = 'flex';
+            itemSpan.style.justifyContent = 'space-between';
+            itemSpan.style.alignItems = 'center';
+            itemSpan.style.fontSize = '1.2em';
+
+            itemSpan.appendChild(delButton);
+            itemElement.appendChild(itemSpan);
             userOrder.appendChild(itemElement);
         });
     }

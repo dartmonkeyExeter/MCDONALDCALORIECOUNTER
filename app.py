@@ -50,7 +50,7 @@ def results_page():
 
     total_cals = 0
     for item in user_order:
-        total_cals += float(
+        total_cals += int(
             str(
                 mcdonalds_items[mcdonalds_items['product_name'] == item]['product_calories'].values[0]
                 ).split(": ")[1])
