@@ -6,8 +6,6 @@
     <h1>Success!</h1>
     <h2>Your Items:</h2>
 
-    {% set cals = 0 %}
-
     <div class="table-div">
         <table class="breakdown-table">
         <tr>
@@ -27,19 +25,21 @@
             <td>{{ individual_kcals[loop.index - 1] }}</td>
             <td>{{ total_prices[loop.index - 1] }}</td>
             <td>{{ individual_prices[loop.index - 1] }}</td>
-            {% set cals_to_add = total_kcals[loop.index - 1] | int %}
-            {% set cals = cals + cals_to_add %}
         </tr>
         {% endfor %}
         
         </table>
     </div>
     
-    {% set percent = (cals | int) / 1600 * 100 %}
-    
-    <h3>This is {{ percent | round(2) }}% of an average daily intake!</h3>
-    <p>Thank you for ordering from McDonald's!</p>
-    
+    <h3>There are {{ cals }} calories in this order! This is {{ (cals / 1800 * 100) | round(1) }}% of a recommended intake!</h3>
+    <h3>There are {{ protein }} grams of protein in this order! This is {{ (protein / 50 * 100) | round(1) }}% of a recommended intake!</h3>
+    <h3>There are {{ fat }} grams of fat in this order! This is {{ (fat / 70 * 100) | round(1) }}% of a recommended intake!</h3>
+    <h3>There are {{ carbs }} grams of carbs in this order! This is {{ (carbs / 260 * 100) | round(1) }}% of a recommended intake!</h3>
+    <h3>There are {{ salt }} grams of salt in this order! This is {{ (salt / 1.5 * 100) | round(1) }}% of a recommended intake!</h3>
+    <h3>There are {{ sugar }} grams of sugar in this order! This is {{ (sugar / 50 * 100) | round(1)}}% of a recommended intake!</h3>
+    <h3>There are {{ saturates }} grams of saturates in this order! This is {{ (saturates / 20 * 100) | round(1) }}% of a recommended intake!</h3>
+    <h5>(Above figures use 1800kcal as a baseline, intake varies due to weight)</h5>
 
+    <img src="{{ url_for('static', filename='images/Big Mac.png') }}" alt="food" class="spinning-big-mac">
 </div>
 {% endblock %}
