@@ -60,6 +60,8 @@ def results_page():
     unique_total_price = []
     unique_individual_price = []
 
+    total_count = len(user_order)
+
     cals = 0
     proteins = 0.0
     carbs = 0.0
@@ -67,6 +69,7 @@ def results_page():
     salt = 0.0
     saturates = 0.0
     sugars = 0.0
+    price = 0.0
 
     for item in order_unique:
         unique_count.append(user_order.count(item))
@@ -160,6 +163,29 @@ def results_page():
             mcdonalds_items[mcdonalds_items["product_name"] == item]["Sugars"].values[0]
         ) * user_order.count(item)
 
+        try:
+            price += float(
+                str(
+                    mcdonalds_items[mcdonalds_items["product_name"] == item][
+                        "product_price"
+                    ].values[0]
+                ).split("£")[1]
+            ) * user_order.count(item)
+        except IndexError:  # this happens when the price is as so "99P"
+            price += (
+                float(
+                    str(
+                        mcdonalds_items[mcdonalds_items["product_name"] == item][
+                            "product_price"
+                        ].values[0]
+                    ).split("P")[0]
+                )
+                * user_order.count(item)
+                / 100
+            )
+
+    price = f"£{price:.2f}"
+
     return render_template(
         "results.html",
         order=order_unique,
@@ -175,6 +201,8 @@ def results_page():
         salt=salt,
         saturates=saturates,
         sugar=sugars,
+        tot_count=total_count,
+        price=price,
     )
 
 

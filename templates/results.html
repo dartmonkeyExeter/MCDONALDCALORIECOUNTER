@@ -17,6 +17,7 @@
             <th>Individual Price (£)</th>
         </tr>
         
+
         {% for item in order %}
         <tr>
             <td>{{ item }}</td>
@@ -27,7 +28,23 @@
             <td>{{ individual_prices[loop.index - 1] }}</td>
         </tr>
         {% endfor %}
+        <tr>
+            <td><br></td>
+            <td><br></td>
+            <td><br></td>
+            <td><br></td>
+            <td><br></td>
+            <td><br></td>
+        </tr>
         
+        <tr>
+            <td>Total</td>
+            <td>{{ tot_count }}</td>
+            <td>{{ cals }}</td>
+            <td><br></td>
+            <td>{{ price }}</td>
+            <td><br></td>
+        </tr>
         </table>
     </div>
     
