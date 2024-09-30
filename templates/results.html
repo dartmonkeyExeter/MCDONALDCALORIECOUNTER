@@ -3,11 +3,11 @@
 {% block content %}
 
 <div class="results-div">
-    <h1>Your order has been submitted successfully!</h1>
-    <h2>Your Order Items:</h2>
-    
-    {{ total_calories }}
-    
+    <h1>Success!</h1>
+    <h2>Your Items:</h2>
+
+    {% set cals = 0 %}
+
     <div class="table-div">
         <table class="breakdown-table">
         <tr>
@@ -27,12 +27,19 @@
             <td>{{ individual_kcals[loop.index - 1] }}</td>
             <td>{{ total_prices[loop.index - 1] }}</td>
             <td>{{ individual_prices[loop.index - 1] }}</td>
+            {% set cals_to_add = total_kcals[loop.index - 1] | int %}
+            {% set cals = cals + cals_to_add %}
         </tr>
         {% endfor %}
         
         </table>
     </div>
-<p>Thank you for ordering from McDonald's!</p>
+    
+    {% set percent = (cals | int) / 1600 * 100 %}
+    
+    <h3>This is {{ percent | round(2) }}% of an average daily intake!</h3>
+    <p>Thank you for ordering from McDonald's!</p>
+    
 
 </div>
 {% endblock %}
