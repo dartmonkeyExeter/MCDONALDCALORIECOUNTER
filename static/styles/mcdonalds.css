@@ -185,13 +185,18 @@ body, html {
 
 header {
     display: flex;
+    justify-content: space-between;
     width: 99%;
-    justify-content:baseline;
-    align-items: center;
     padding: 10px;
     background-color: #DA291C;
     color: white;
     border-radius: 10px;
+}
+
+.logo-name {
+    display: flex;
+    justify-content:baseline;
+    align-items: center;
 }
 
 #mc-logo {

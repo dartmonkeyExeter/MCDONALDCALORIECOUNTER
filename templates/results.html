@@ -38,7 +38,7 @@
     <h3>There are {{ salt }} grams of salt in this order! This is {{ (salt / 1.5 * 100) | round(1) }}% of a recommended intake!</h3>
     <h3>There are {{ sugar }} grams of sugar in this order! This is {{ (sugar / 50 * 100) | round(1)}}% of a recommended intake!</h3>
     <h3>There are {{ saturates }} grams of saturates in this order! This is {{ (saturates / 20 * 100) | round(1) }}% of a recommended intake!</h3>
-    <h5>(Above figures use 1800kcal as a baseline, intake varies due to weight)</h5>
+    <h6>(Above figures use 1800kcal as a baseline, intake varies due to various factors, always consult a Doctor for health advice!)</h6>
 
     <img src="{{ url_for('static', filename='images/Big Mac.png') }}" alt="food" class="spinning-big-mac">
 </div>
