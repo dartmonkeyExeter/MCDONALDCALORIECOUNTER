@@ -19,5 +19,12 @@
     <main>
         {% block content %}{% endblock %}
     </main>
+
+    <script>
+        const logo = document.getElementById('mc-logo');
+        logo.addEventListener('click', () => {
+            window.location.href = '/';
+        });
+    </script>
 </body>
 </html>

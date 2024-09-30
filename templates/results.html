@@ -1,13 +1,38 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Your order has been submitted successfully!</h1>
-<h2>Your Order Items:</h2>
-<ul>
+
+<div class="results-div">
+    <h1>Your order has been submitted successfully!</h1>
+    <h2>Your Order Items:</h2>
+    
     {{ total_calories }}
-    {% for item in order %}
-        <li>{{ item }}</li>
-    {% endfor %}
-</ul>
+    
+    <div class="table-div">
+        <table class="breakdown-table">
+        <tr>
+            <th>Item</th>
+            <th>Count</th>
+            <th>Total Calories</th>
+            <th>Individual Calories</th>
+            <th>Total Price (£)</th>
+            <th>Individual Price (£)</th>
+        </tr>
+        
+        {% for item in order %}
+        <tr>
+            <td>{{ item }}</td>
+            <td>{{ count[loop.index - 1] }}</td>
+            <td>{{ total_kcals[loop.index - 1] }}</td>
+            <td>{{ individual_kcals[loop.index - 1] }}</td>
+            <td>{{ total_prices[loop.index - 1] }}</td>
+            <td>{{ individual_prices[loop.index - 1] }}</td>
+        </tr>
+        {% endfor %}
+        
+        </table>
+    </div>
 <p>Thank you for ordering from McDonald's!</p>
+
+</div>
 {% endblock %}

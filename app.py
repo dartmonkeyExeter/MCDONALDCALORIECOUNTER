@@ -18,6 +18,7 @@ image_exts = ['.jpg', '.jpeg', '.png', '.webp', '.jfif']
 def index():
     item_names = mcdonalds_items['product_name'].values
     file_names = []
+    session['user_order'] = []
 
     file_found = False
     for name in item_names:
@@ -47,15 +48,25 @@ def results():
 def results_page():
     # Retrieve the order from the session
     user_order = session.get('user_order', [])
+    order_unique = list(set(user_order))
+    unique_count = []
+    unique_total_kcals = []
+    unique_individual_kcals = []
+    unique_total_price = []
+    unique_individual_price = []
 
-    total_cals = 0
-    for item in user_order:
-        total_cals += int(
-            str(
-                mcdonalds_items[mcdonalds_items['product_name'] == item]['product_calories'].values[0]
-                ).split(": ")[1])
+    for item in order_unique:
+        unique_count.append(user_order.count(item))
+        unique_total_kcals.append(int(str(mcdonalds_items[mcdonalds_items['product_name'] == item]['product_calories'].values[0]).split(": ")[1]) * user_order.count(item))
+        unique_individual_kcals.append(int(str(mcdonalds_items[mcdonalds_items['product_name'] == item]['product_calories'].values[0]).split(": ")[1]))
+        try:
+            temp_total = float(str(mcdonalds_items[mcdonalds_items['product_name'] == item]['product_price'].values[0]).split('£')[1]) * user_order.count(item)
+        except IndexError: # this happens when the price is as so "99P"
+            temp_total = float(str(mcdonalds_items[mcdonalds_items['product_name'] == item]['product_price'].values[0]).split('P')[0]) * user_order.count(item) / 100
+        unique_total_price.append(f"£ {temp_total:.2f}")
+        unique_individual_price.append(mcdonalds_items[mcdonalds_items['product_name'] == item]['product_price'].values[0])
 
-    return render_template('results.html', order=user_order, data=mcdonalds_items, total_calories=total_cals)
+    return render_template('results.html', order=order_unique, count=unique_count, total_kcals=unique_total_kcals, individual_kcals=unique_individual_kcals, individual_prices=unique_individual_price, total_prices=unique_total_price)
 
 if __name__ == "__main__":
     app.run(debug=True)

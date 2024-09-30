@@ -197,6 +197,7 @@ header {
 #mc-logo {
     width: 128px;
     height: auto;
+    cursor: pointer;
 }
 
 hr {
@@ -216,4 +217,21 @@ hr {
     cursor: pointer;
     background-color: #DA291C;
     padding: 1px;
+}
+
+.results-div {
+    width: 100%;
+    text-align: center;
+}
+
+.table-div {
+    width: 66%;
+    background-color: #E9E9E9;
+    border-radius: 10px;
+    box-shadow: 0 4px rgba(0, 0, 0, 0.5);
+}
+
+.breakdown-table {
+    width: 100%;
+    height: 100%;
 }
